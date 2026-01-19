@@ -1,0 +1,38 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-meta-lexical-editor.css --postcss --watch",
+        "dev:scripts": "node bin/build.js --dev",
+        "build:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-meta-lexical-editor.css --postcss --minify",
+        "build:scripts": "node bin/build.js",
+        "purge": "filament-purge -i resources/dist/filament-meta-lexical-editor.css -o resources/dist/filament-meta-lexical-editor.css -v 3.x",
+        "hash:css": "node bin/hash-css.js",
+        "dev": "npm-run-all --parallel dev:*",
+        "build": "npm-run-all build:styles purge build:scripts hash:css"
+    },
+    "devDependencies": {
+        "@awcodes/filament-plugin-purge": "^1.1.2",
+        "@tailwindcss/cli": "^4.1.11",
+        "esbuild": "^0.25.3",
+        "npm-run-all": "^4.1.5",
+        "tailwindcss": "^4.1.11",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@lexical/code": "^0.39.0",
+        "@lexical/hashtag": "^0.39.0",
+        "@lexical/history": "^0.39.0",
+        "@lexical/html": "^0.39.0",
+        "@lexical/link": "^0.39.0",
+        "@lexical/list": "^0.39.0",
+        "@lexical/rich-text": "^0.39.0",
+        "@lexical/selection": "^0.39.0",
+        "@lexical/table": "^0.39.0",
+        "@lexical/text": "^0.39.0",
+        "@lexical/utils": "^0.39.0",
+        "@melloware/coloris": "^0.24.0",
+        "lexical": "^0.39.0",
+        "vanilla-colorful": "^0.7.2"
+    }
+}
