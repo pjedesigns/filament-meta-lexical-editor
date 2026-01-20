@@ -26,6 +26,14 @@ class FilamentMetaLexicalEditorServiceProvider extends PackageServiceProvider
             ->hasRoutes('web');
     }
 
+    public function packageRegistered(): void
+    {
+        // Register frontend CSS publishing
+        $this->publishes([
+            __DIR__.'/../resources/dist/frontend.css' => public_path('vendor/filament-meta-lexical-editor/frontend.css'),
+        ], 'filament-meta-lexical-editor-frontend');
+    }
+
     public function packageBooted(): void
     {
         FilamentAsset::register(

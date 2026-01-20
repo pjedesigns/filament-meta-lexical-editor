@@ -288,7 +288,33 @@ public static function table(Table $table): Table
 
 ### In Blade Views
 
-For frontend display, output the content directly (it's sanitized on save):
+For frontend display, you need to include the frontend CSS and wrap your content:
+
+#### Step 1: Publish the Frontend CSS
+
+```bash
+php artisan vendor:publish --tag="filament-meta-lexical-editor-frontend"
+```
+
+This publishes `frontend.css` to `public/vendor/filament-meta-lexical-editor/frontend.css`.
+
+#### Step 2: Include the CSS in Your Layout
+
+Add this to your frontend layout's `<head>`:
+
+```blade
+<link rel="stylesheet" href="{{ asset('vendor/filament-meta-lexical-editor/frontend.css') }}">
+```
+
+Or import it in your Vite build (e.g., in your `app.css`):
+
+```css
+@import '../../vendor/pjedesigns/filament-meta-lexical-editor/resources/css/frontend.css';
+```
+
+#### Step 3: Wrap Your Content
+
+Output the content wrapped in a `lexical-content` div:
 
 ```blade
 <div class="lexical-content">
@@ -296,10 +322,24 @@ For frontend display, output the content directly (it's sanitized on save):
 </div>
 ```
 
+#### Twitter Embeds
+
 For Twitter embeds to work on the frontend, include the Twitter widget script:
 
 ```blade
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+#### Dark Mode Support
+
+The frontend CSS includes dark mode styles. Add the `dark` class to a parent element:
+
+```blade
+<body class="dark">
+    <div class="lexical-content">
+        {!! $post->content !!}
+    </div>
+</body>
 ```
 
 ## Configuration

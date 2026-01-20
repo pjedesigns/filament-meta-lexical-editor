@@ -5,11 +5,12 @@
         "dev:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-meta-lexical-editor.css --postcss --watch",
         "dev:scripts": "node bin/build.js --dev",
         "build:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-meta-lexical-editor.css --postcss --minify",
+        "build:frontend": "npx tailwindcss -i resources/css/frontend.css -o resources/dist/frontend.css --postcss --minify",
         "build:scripts": "node bin/build.js",
         "purge": "filament-purge -i resources/dist/filament-meta-lexical-editor.css -o resources/dist/filament-meta-lexical-editor.css -v 3.x",
         "hash:css": "node bin/hash-css.js",
         "dev": "npm-run-all --parallel dev:*",
-        "build": "npm-run-all build:styles purge build:scripts hash:css"
+        "build": "npm-run-all build:styles build:frontend purge build:scripts hash:css"
     },
     "devDependencies": {
         "@awcodes/filament-plugin-purge": "^1.1.2",

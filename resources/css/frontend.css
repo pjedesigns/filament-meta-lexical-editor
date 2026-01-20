@@ -1,0 +1,14 @@
+/**
+ * Filament Meta Lexical Editor - Frontend Styles
+ *
+ * Include this CSS file in your frontend views to properly render
+ * content created with the Lexical Editor.
+ *
+ * Usage in Blade (after publishing):
+ * <link rel="stylesheet" href="{{ asset('vendor/filament-meta-lexical-editor/frontend.css') }}">
+ *
+ * Or import in your Vite/build process:
+ * @import 'vendor/pjedesigns/filament-meta-lexical-editor/resources/css/frontend.css';
+ */
+
+@import "./content.css";

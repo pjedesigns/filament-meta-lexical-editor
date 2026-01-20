@@ -1,3 +1,4 @@
 @import "tailwindcss" source(none);
 @import "@melloware/coloris/dist/coloris.css";
 @import "./editor.css";
+@import "./content.css";
