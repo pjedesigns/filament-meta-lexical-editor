@@ -30,6 +30,20 @@ function writeManifest(partial) {
     fs.writeFileSync(manifestPath, JSON.stringify(merged, null, 2), 'utf8')
 }
 
+function cleanOldCssBuilds() {
+    if (!fs.existsSync(distDir)) return
+
+    const files = fs.readdirSync(distDir)
+    const hashPattern = /^filament-meta-lexical-editor\.[a-f0-9]{8}\.css$/
+
+    for (const file of files) {
+        if (hashPattern.test(file)) {
+            fs.unlinkSync(path.join(distDir, file))
+            console.log(`Removed old CSS build: ${file}`)
+        }
+    }
+}
+
 ensureDistDir()
 
 if (isDev) {
@@ -46,6 +60,9 @@ if (!fs.existsSync(cssFile)) {
     console.error('CSS file not found:', cssFile)
     process.exit(1)
 }
+
+// Clean old hashed CSS builds before creating new one
+cleanOldCssBuilds()
 
 const buf = fs.readFileSync(cssFile)
 const hash = crypto.createHash('md5').update(buf).digest('hex').slice(0, 8)

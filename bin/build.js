@@ -15,6 +15,20 @@ function ensureDistDir() {
     }
 }
 
+function cleanOldBuilds() {
+    if (!fs.existsSync(distDir)) return
+
+    const files = fs.readdirSync(distDir)
+    const hashPattern = /^filament-meta-lexical-editor\.[A-Z0-9a-f]{8}\.(js|css)$/
+
+    for (const file of files) {
+        if (hashPattern.test(file)) {
+            fs.unlinkSync(path.join(distDir, file))
+            console.log(`Removed old build: ${file}`)
+        }
+    }
+}
+
 function writeManifest(partial) {
     ensureDistDir()
 
@@ -121,6 +135,9 @@ if (isDev) {
         outfile: './resources/dist/filament-meta-lexical-editor.js',
     })
 } else {
+    // Clean old hashed builds before creating new ones
+    cleanOldBuilds()
+
     await compile({
         ...defaultOptions,
         entryPoints: ['./resources/js/index.ts'],
