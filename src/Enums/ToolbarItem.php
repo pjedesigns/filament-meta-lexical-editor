@@ -51,6 +51,7 @@ enum ToolbarItem: string implements HasLabel
     case TWEET = 'tweet';
     case COLLAPSIBLE = 'collapsible';
     case DATE = 'date';
+    case FULLSCREEN = 'fullscreen';
     case DIVIDER = 'divider';
 
     public function getLabel(): string
@@ -101,6 +102,7 @@ enum ToolbarItem: string implements HasLabel
             self::TWEET => __('filament-meta-lexical-editor::filament-meta-lexical-editor.tweet'),
             self::COLLAPSIBLE => __('filament-meta-lexical-editor::filament-meta-lexical-editor.collapsible'),
             self::DATE => __('filament-meta-lexical-editor::filament-meta-lexical-editor.date_editor.date'),
+            self::FULLSCREEN => __('filament-meta-lexical-editor::filament-meta-lexical-editor.fullscreen'),
             self::DIVIDER => '',
         };
     }

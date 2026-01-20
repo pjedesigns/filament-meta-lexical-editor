@@ -235,6 +235,32 @@
         <x-filament-meta-lexical-editor::toolbar-item ref="date" title="{{ __('filament-meta-lexical-editor::filament-meta-lexical-editor.date_editor.date') }}" shortcut=""
                                                  icon="date"/>
         @break
+    @case(ToolbarItem::FULLSCREEN)
+        <button type="button"
+                x-ref="fullscreen"
+                x-data="{ localFullscreen: false }"
+                x-init="
+                    $watch('$el.closest(\'.lexical-editor\').classList.contains(\'lexical-editor-fullscreen\')', value => localFullscreen = value);
+                    new MutationObserver(() => {
+                        localFullscreen = $el.closest('.lexical-editor')?.classList.contains('lexical-editor-fullscreen') || false;
+                    }).observe($el.closest('.lexical-editor'), { attributes: true, attributeFilter: ['class'] });
+                "
+                @click="$dispatch('toggle-fullscreen')"
+                class="toolbar-item spaced"
+                :title="localFullscreen ? '{{ __('filament-meta-lexical-editor::filament-meta-lexical-editor.fullscreen_collapse') }}' : '{{ __('filament-meta-lexical-editor::filament-meta-lexical-editor.fullscreen_expand') }}'"
+                x-tooltip="localFullscreen ? '{{ __('filament-meta-lexical-editor::filament-meta-lexical-editor.fullscreen_collapse') }} (Esc)' : '{{ __('filament-meta-lexical-editor::filament-meta-lexical-editor.fullscreen_expand') }} (F11)'">
+            <template x-if="!localFullscreen">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+            </template>
+            <template x-if="localFullscreen">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                </svg>
+            </template>
+        </button>
+        @break
     @case(ToolbarItem::DIVIDER)
         <div class="divider"></div>
         @break

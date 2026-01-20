@@ -801,11 +801,43 @@ export default function lexicalComponent({
             this.closeLinkEditorDialog();
         },
 
+        // Helper to close all dialog editors
+        closeAllDialogs: function () {
+            this.showLinkEditor = false;
+            this.linkEditorAnchor = null;
+            this.showTableEditor = false;
+            this.tableEditorAnchor = null;
+            this.showLayoutEditor = false;
+            this.layoutEditorAnchor = null;
+            this.showYouTubeEditor = false;
+            this.youTubeEditorAnchor = null;
+            this.showTweetEditor = false;
+            this.tweetEditorAnchor = null;
+            this.showCollapsibleEditor = false;
+            this.collapsibleEditorAnchor = null;
+            this.showDateEditor = false;
+            this.dateEditorAnchor = null;
+        },
+
         showLinkEditorDialog: function (
             element: HTMLElement,
             url: string | null = null,
             editable: boolean = true,
         ) {
+            // Close all other dialogs first (except link editor itself for editing different links)
+            this.showTableEditor = false;
+            this.tableEditorAnchor = null;
+            this.showLayoutEditor = false;
+            this.layoutEditorAnchor = null;
+            this.showYouTubeEditor = false;
+            this.youTubeEditorAnchor = null;
+            this.showTweetEditor = false;
+            this.tweetEditorAnchor = null;
+            this.showCollapsibleEditor = false;
+            this.collapsibleEditorAnchor = null;
+            this.showDateEditor = false;
+            this.dateEditorAnchor = null;
+
             this.$nextTick(() => {
                 this.linkEditorAnchor = element;
                 this.linkEditMode = editable;
@@ -1129,6 +1161,13 @@ export default function lexicalComponent({
 
         // ---------- TABLE ----------
         showTableEditorDialog: function (element: HTMLElement) {
+            // Toggle if already open
+            if (this.showTableEditor) {
+                this.closeTableEditorDialog();
+                return;
+            }
+            // Close all other dialogs first
+            this.closeAllDialogs();
             this.$nextTick(() => {
                 this.tableEditorAnchor = element;
                 this.showTableEditor = true;
@@ -1169,6 +1208,13 @@ export default function lexicalComponent({
 
         // ---------- LAYOUT ----------
         showLayoutEditorDialog: function (element: HTMLElement) {
+            // Toggle if already open
+            if (this.showLayoutEditor) {
+                this.closeLayoutEditorDialog();
+                return;
+            }
+            // Close all other dialogs first
+            this.closeAllDialogs();
             this.$nextTick(() => {
                 this.layoutEditorAnchor = element;
                 this.showLayoutEditor = true;
@@ -1199,6 +1245,13 @@ export default function lexicalComponent({
 
         // ---------- YOUTUBE ----------
         showYouTubeEditorDialog: function (element: HTMLElement) {
+            // Toggle if already open
+            if (this.showYouTubeEditor) {
+                this.closeYouTubeEditorDialog();
+                return;
+            }
+            // Close all other dialogs first
+            this.closeAllDialogs();
             this.$nextTick(() => {
                 this.youTubeEditorAnchor = element;
                 this.showYouTubeEditor = true;
@@ -1233,6 +1286,13 @@ export default function lexicalComponent({
 
         // ---------- TWEET ----------
         showTweetEditorDialog: function (element: HTMLElement) {
+            // Toggle if already open
+            if (this.showTweetEditor) {
+                this.closeTweetEditorDialog();
+                return;
+            }
+            // Close all other dialogs first
+            this.closeAllDialogs();
             this.$nextTick(() => {
                 this.tweetEditorAnchor = element;
                 this.showTweetEditor = true;
@@ -1267,6 +1327,13 @@ export default function lexicalComponent({
 
         // ---------- COLLAPSIBLE ----------
         showCollapsibleEditorDialog: function (element: HTMLElement) {
+            // Toggle if already open
+            if (this.showCollapsibleEditor) {
+                this.closeCollapsibleEditorDialog();
+                return;
+            }
+            // Close all other dialogs first
+            this.closeAllDialogs();
             this.$nextTick(() => {
                 this.collapsibleEditorAnchor = element;
                 this.showCollapsibleEditor = true;
@@ -1299,6 +1366,13 @@ export default function lexicalComponent({
 
         // ---------- DATE ----------
         showDateEditorDialog: function (element: HTMLElement) {
+            // Toggle if already open
+            if (this.showDateEditor) {
+                this.closeDateEditorDialog();
+                return;
+            }
+            // Close all other dialogs first
+            this.closeAllDialogs();
             this.$nextTick(() => {
                 this.dateEditorAnchor = element;
                 this.showDateEditor = true;

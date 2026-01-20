@@ -44,6 +44,7 @@ class MetaLexicalEditor extends Field
         ToolbarItem::START, ToolbarItem::END, ToolbarItem::DIVIDER,
         ToolbarItem::INDENT, ToolbarItem::OUTDENT, ToolbarItem::DIVIDER,
         ToolbarItem::HR, ToolbarItem::TABLE, ToolbarItem::DIVIDER,
+        ToolbarItem::FULLSCREEN,
     ];
 
     protected function setUp(): void
@@ -270,6 +271,16 @@ class MetaLexicalEditor extends Field
     }
 
     /**
+     * Enable or disable the fullscreen toggle button.
+     * Fullscreen is enabled by default on the default toolbar.
+     * Use this method to explicitly enable/disable it when using custom toolbars.
+     */
+    public function hasFullscreen(bool $enabled = true): static
+    {
+        return $this->toggleToolbarItem(ToolbarItem::FULLSCREEN, $enabled, ToolbarItem::DATE);
+    }
+
+    /**
      * Enable all embed features (YouTube, Tweets, Collapsible sections).
      */
     public function hasEmbeds(bool $enabled = true): static
@@ -334,12 +345,14 @@ class MetaLexicalEditor extends Field
             'minimal' => [
                 ToolbarItem::BOLD, ToolbarItem::ITALIC, ToolbarItem::UNDERLINE,
                 ToolbarItem::DIVIDER, ToolbarItem::LINK,
+                ToolbarItem::DIVIDER, ToolbarItem::FULLSCREEN,
             ],
             'basic' => [
                 ToolbarItem::UNDO, ToolbarItem::REDO, ToolbarItem::DIVIDER,
                 ToolbarItem::BOLD, ToolbarItem::ITALIC, ToolbarItem::UNDERLINE,
                 ToolbarItem::DIVIDER, ToolbarItem::LINK, ToolbarItem::DIVIDER,
                 ToolbarItem::BULLET, ToolbarItem::NUMBERED,
+                ToolbarItem::DIVIDER, ToolbarItem::FULLSCREEN,
             ],
             'standard' => [
                 ToolbarItem::UNDO, ToolbarItem::REDO, ToolbarItem::DIVIDER,
@@ -348,6 +361,7 @@ class MetaLexicalEditor extends Field
                 ToolbarItem::DIVIDER, ToolbarItem::BOLD, ToolbarItem::ITALIC, ToolbarItem::UNDERLINE,
                 ToolbarItem::DIVIDER, ToolbarItem::LINK, ToolbarItem::DIVIDER,
                 ToolbarItem::LEFT, ToolbarItem::CENTER, ToolbarItem::RIGHT,
+                ToolbarItem::DIVIDER, ToolbarItem::FULLSCREEN,
             ],
             'full' => self::getFullToolbar(),
             default => throw new InvalidArgumentException("Unknown toolbar preset: {$preset}"),
@@ -381,6 +395,7 @@ class MetaLexicalEditor extends Field
             ToolbarItem::HR, ToolbarItem::TABLE, ToolbarItem::COLUMNS, ToolbarItem::DIVIDER,
             ToolbarItem::IMAGE, ToolbarItem::YOUTUBE, ToolbarItem::TWEET, ToolbarItem::DIVIDER,
             ToolbarItem::COLLAPSIBLE, ToolbarItem::DATE, ToolbarItem::DIVIDER,
+            ToolbarItem::FULLSCREEN,
         ];
     }
 

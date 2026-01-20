@@ -49,6 +49,9 @@ return [
     'youtube' => 'YouTube Video',
     'tweet' => 'Tweet/X Post',
     'collapsible' => 'Collapsible Section',
+    'fullscreen' => 'Toggle Fullscreen',
+    'fullscreen_expand' => 'Expand to Fullscreen',
+    'fullscreen_collapse' => 'Exit Fullscreen',
     'cancel' => 'Cancel',
     'delete' => 'Delete',
 

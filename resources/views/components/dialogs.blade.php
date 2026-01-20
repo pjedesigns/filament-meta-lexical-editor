@@ -1,4 +1,4 @@
-<div style="height: 0">
+<div class="lexical-dialogs-container">
     <x-filament-meta-lexical-editor::link-editor/>
     <x-filament-meta-lexical-editor::table-editor/>
     <x-filament-meta-lexical-editor::image-dialog/>
