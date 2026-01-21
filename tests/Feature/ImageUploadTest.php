@@ -1,13 +1,12 @@
 <?php
 
-use App\Domains\Auth\Models\Users\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Pjedesigns\FilamentMetaLexicalEditor\Support\LexicalSessionImageTracker;
+use Pjedesigns\FilamentMetaLexicalEditor\Tests\Fixtures\User;
 
 beforeEach(function () {
-    // Configure the package to use 'local' disk for testing
     config(['filament-meta-lexical-editor.disk' => 'local']);
     config(['filament-meta-lexical-editor.directory' => 'lexical-test']);
     Storage::fake('local');
@@ -68,7 +67,7 @@ describe('Image Upload Controller', function () {
 
         $this->post(route('filament-meta-lexical-editor.upload-image'), [
             'image' => $file,
-        ])->assertRedirect();
+        ])->assertRedirect(route('login'));
     });
 
     it('requires an image file', function () {
