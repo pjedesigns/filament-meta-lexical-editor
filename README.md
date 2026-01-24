@@ -21,6 +21,12 @@ A modern, extensible rich-text editor for FilamentPHP built on Meta's Lexical fr
 - **RTL Support**: Right-to-left text direction support
 - **Orphaned Image Cleanup**: Automatic cleanup of deleted images on save
 
+## Requirements
+
+- PHP 8.2+
+- Laravel 12+
+- Filament v4/v5
+
 ## Installation
 
 Install the package via Composer:
