@@ -20,7 +20,7 @@ class LexicalImageCleaner
         $urls = [];
 
         libxml_use_internal_errors(true);
-        $doc = new DOMDocument();
+        $doc = new DOMDocument;
         $doc->loadHTML('<html><body>'.$html.'</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
 
