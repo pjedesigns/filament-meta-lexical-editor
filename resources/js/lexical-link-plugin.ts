@@ -58,7 +58,7 @@ export function validateUrl(url: string): boolean {
     if (isInternalUrl(url)) {
         return true;
     }
-    // TODO: fix UI for link insertion; it should never default to invalid URL like https://
+
     return url === 'https://' || urlRegExp.test(url);
 }
 
