@@ -92,6 +92,7 @@ import {
     $isImageNode,
     ImageNode,
     INSERT_IMAGE_COMMAND,
+    type ImageAlignment,
     type InsertImagePayload,
     registerInsertImageCommand,
 } from './lexical-image-plugin';
@@ -291,6 +292,13 @@ type LexicalComponent = AlpineMagic & {
     setDateTomorrow: () => void;
     setDateNextWeek: () => void;
     getDatePreview: () => string;
+
+    // image editor extended state
+    imageCssClasses: string;
+    imageAlignment: ImageAlignment;
+    imageLinkUrl: string;
+    imageLinkTarget: string;
+    imageLoading: 'lazy' | 'eager';
 
     // aspect lock (matches Blade)
     imageLockAspect: boolean;
@@ -493,6 +501,11 @@ export default function lexicalComponent({
         imageLockAspect: true,
         imageAspectRatio: null,
         imageLastChanged: null,
+        imageCssClasses: '',
+        imageAlignment: 'none' as ImageAlignment,
+        imageLinkUrl: '',
+        imageLinkTarget: '_blank',
+        imageLoading: 'lazy' as 'lazy' | 'eager',
 
         // Track images for cleanup
         originalImages: new Set<string>(),
@@ -990,6 +1003,13 @@ export default function lexicalComponent({
                 this.imageLockAspect = true;
                 this.imageLastChanged = null;
 
+                // Populate extended fields
+                this.imageCssClasses = node.getCssClasses();
+                this.imageAlignment = node.getAlignment();
+                this.imageLinkUrl = node.getLinkUrl();
+                this.imageLinkTarget = node.getLinkTarget();
+                this.imageLoading = node.getLoading();
+
                 this.$dispatch('open-modal', { id: modalId });
             });
         },
@@ -1056,6 +1076,11 @@ export default function lexicalComponent({
 
                 node.setAltText(alt);
                 node.setWidthAndHeight(width, height);
+                node.setCssClasses(this.imageCssClasses);
+                node.setAlignment(this.imageAlignment);
+                node.setLinkUrl(this.imageLinkUrl);
+                node.setLinkTarget(this.imageLinkTarget);
+                node.setLoading(this.imageLoading);
             });
 
             this.resetImageEditorForm();
@@ -1078,6 +1103,11 @@ export default function lexicalComponent({
             this.imageAspectRatio = null;
             this.imageLastChanged = null;
             this.imageLockAspect = true;
+            this.imageCssClasses = '';
+            this.imageAlignment = 'none' as ImageAlignment;
+            this.imageLinkUrl = '';
+            this.imageLinkTarget = '_blank';
+            this.imageLoading = 'lazy';
         },
 
         closeImageEditorModal: function () {

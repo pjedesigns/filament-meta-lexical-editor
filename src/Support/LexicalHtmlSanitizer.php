@@ -217,6 +217,14 @@ class LexicalHtmlSanitizer
         }
     }
 
+    /** @var array<string, true> Allowed image alignment values */
+    protected static array $allowedAlignments = [
+        'left' => true,
+        'center' => true,
+        'right' => true,
+        'full' => true,
+    ];
+
     protected static function sanitizeImage(DOMElement $img): void
     {
         $src = trim($img->getAttribute('src'));
@@ -236,6 +244,35 @@ class LexicalHtmlSanitizer
             $v = $img->getAttribute($attr);
             if ($v !== '' && ! ctype_digit($v)) {
                 $img->removeAttribute($attr);
+            }
+        }
+
+        // Validate loading attribute (allow only lazy or eager)
+        $loading = $img->getAttribute('loading');
+        if ($loading !== '' && $loading !== 'lazy' && $loading !== 'eager') {
+            $img->removeAttribute('loading');
+        }
+
+        // Validate data-alignment attribute
+        $alignment = $img->getAttribute('data-alignment');
+        if ($alignment !== '' && ! isset(self::$allowedAlignments[$alignment])) {
+            $img->removeAttribute('data-alignment');
+        }
+
+        // Validate class attribute tokens (allow safe Tailwind-style class names)
+        $classAttr = trim($img->getAttribute('class'));
+        if ($classAttr !== '') {
+            $classes = preg_split('/\s+/', $classAttr);
+            $safeClasses = array_filter($classes, function (string $cls): bool {
+                // Allow alphanumeric, hyphens, underscores, colons, dots, slashes, brackets, percentages
+                // Covers: rounded-lg, sm:w-1/2, hover:scale-105, w-[200px], max-w-full, etc.
+                return (bool) preg_match('/^[a-zA-Z0-9\-_:.\[\]\/!%]+$/', $cls);
+            });
+
+            if (count($safeClasses) > 0) {
+                $img->setAttribute('class', implode(' ', $safeClasses));
+            } else {
+                $img->removeAttribute('class');
             }
         }
     }
