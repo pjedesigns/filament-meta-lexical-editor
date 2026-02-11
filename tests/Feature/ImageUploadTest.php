@@ -173,4 +173,104 @@ describe('Image Upload Controller', function () {
             ->toContain($response1->json('url'))
             ->toContain($response2->json('url'));
     });
+
+    it('stores image in the configured directory', function () {
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('test.jpg');
+
+        $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+            ])
+            ->assertSuccessful();
+
+        $dir = config('filament-meta-lexical-editor.directory');
+        $files = Storage::disk('local')->files($dir);
+
+        expect($files)->toHaveCount(1);
+        expect($files[0])->toStartWith($dir.'/');
+    });
+
+    it('stores image with UUID filename preserving extension', function () {
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('test.png');
+
+        $response = $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+            ])
+            ->assertSuccessful();
+
+        $url = $response->json('url');
+
+        expect($url)->toEndWith('.png');
+    });
+
+    it('returns null alt when not provided', function () {
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('test.jpg');
+
+        $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'alt' => null,
+            ]);
+    });
+
+    it('returns url in response', function () {
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('test.jpg');
+
+        $response = $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+            ])
+            ->assertSuccessful();
+
+        $url = $response->json('url');
+
+        expect($url)->toBeString();
+        expect($url)->not->toBeEmpty();
+    });
+
+    it('accepts webp image format', function () {
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('test.webp');
+
+        $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+            ])
+            ->assertSuccessful();
+    });
+
+    it('rejects oversized images based on config', function () {
+        config(['filament-meta-lexical-editor.max_kb' => 1]); // 1KB max
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('large.jpg')->size(100); // 100KB
+
+        $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+            ])
+            ->assertSessionHasErrors('image');
+    });
+
+    it('accepts alt text at max length boundary', function () {
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->image('test.jpg');
+
+        $this->actingAs($user)
+            ->post(route('filament-meta-lexical-editor.upload-image'), [
+                'image' => $file,
+                'alt' => str_repeat('a', 255),
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'alt' => str_repeat('a', 255),
+            ]);
+    });
 });

@@ -177,5 +177,99 @@ describe('LexicalImageCleaner', function () {
 
             expect(Storage::disk($disk)->exists('lexical/image.jpg'))->toBeFalse();
         });
+
+        it('handles null to null transition', function () {
+            LexicalImageCleaner::cleanupOrphaned(null, null);
+
+            // Should not throw an exception
+            expect(true)->toBeTrue();
+        });
+    });
+
+    describe('deleteImages multiple files', function () {
+        it('deletes multiple images at once', function () {
+            $disk = config('filament-meta-lexical-editor.disk');
+            Storage::disk($disk)->put('lexical/image1.jpg', 'content1');
+            Storage::disk($disk)->put('lexical/image2.jpg', 'content2');
+            Storage::disk($disk)->put('lexical/image3.jpg', 'content3');
+
+            LexicalImageCleaner::deleteImages([
+                '/storage/lexical/image1.jpg',
+                '/storage/lexical/image2.jpg',
+            ]);
+
+            expect(Storage::disk($disk)->exists('lexical/image1.jpg'))->toBeFalse();
+            expect(Storage::disk($disk)->exists('lexical/image2.jpg'))->toBeFalse();
+            expect(Storage::disk($disk)->exists('lexical/image3.jpg'))->toBeTrue();
+        });
+
+        it('handles empty array of images', function () {
+            LexicalImageCleaner::deleteImages([]);
+
+            // Should not throw an exception
+            expect(true)->toBeTrue();
+        });
+
+        it('handles mix of existing and non-existing images', function () {
+            $disk = config('filament-meta-lexical-editor.disk');
+            Storage::disk($disk)->put('lexical/exists.jpg', 'content');
+
+            LexicalImageCleaner::deleteImages([
+                '/storage/lexical/exists.jpg',
+                '/storage/lexical/nonexistent.jpg',
+            ]);
+
+            expect(Storage::disk($disk)->exists('lexical/exists.jpg'))->toBeFalse();
+        });
+    });
+
+    describe('extractImageUrls edge cases', function () {
+        it('extracts images with alt attributes', function () {
+            $html = '<img src="/storage/lexical/photo.jpg" alt="My photo">';
+
+            $urls = LexicalImageCleaner::extractImageUrls($html);
+
+            expect($urls)->toBe(['/storage/lexical/photo.jpg']);
+        });
+
+        it('extracts images with multiple attributes', function () {
+            $html = '<img src="/storage/lexical/photo.jpg" alt="Photo" width="100" height="50" loading="lazy">';
+
+            $urls = LexicalImageCleaner::extractImageUrls($html);
+
+            expect($urls)->toBe(['/storage/lexical/photo.jpg']);
+        });
+
+        it('does not extract images without src', function () {
+            $html = '<img alt="No source">';
+
+            $urls = LexicalImageCleaner::extractImageUrls($html);
+
+            expect($urls)->toBe([]);
+        });
+    });
+
+    describe('getOrphanedImages edge cases', function () {
+        it('handles both HTML being null', function () {
+            $orphaned = LexicalImageCleaner::getOrphanedImages(null, null);
+
+            expect($orphaned)->toBe([]);
+        });
+
+        it('handles both HTML being empty', function () {
+            $orphaned = LexicalImageCleaner::getOrphanedImages('', '');
+
+            expect($orphaned)->toBe([]);
+        });
+
+        it('handles duplicate images in old HTML', function () {
+            $oldHtml = '<img src="/storage/lexical/image.jpg"><img src="/storage/lexical/image.jpg">';
+            $newHtml = '<p>No images</p>';
+
+            $orphaned = LexicalImageCleaner::getOrphanedImages($oldHtml, $newHtml);
+
+            // array_diff returns unique orphaned URLs
+            expect($orphaned)->toContain('/storage/lexical/image.jpg');
+        });
     });
 });

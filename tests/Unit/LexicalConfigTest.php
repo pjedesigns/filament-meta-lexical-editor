@@ -56,5 +56,29 @@ describe('LexicalConfig', function () {
 
             expect(LexicalConfig::getDirectory())->toBe('lexical');
         });
+
+        it('ignores empty string as directory', function () {
+            config(['filament-meta-lexical-editor.directory' => '']);
+
+            expect(LexicalConfig::getDirectory())->toBe('lexical');
+        });
+    });
+
+    describe('getDisk edge cases', function () {
+        it('ignores empty string as Filament disk', function () {
+            config(['filament-meta-lexical-editor.disk' => null]);
+            config(['filament.default_filesystem_disk' => '']);
+            config(['filesystems.default' => 'local']);
+
+            expect(LexicalConfig::getDisk())->toBe('local');
+        });
+
+        it('ignores empty string as Laravel default disk', function () {
+            config(['filament-meta-lexical-editor.disk' => null]);
+            config(['filament.default_filesystem_disk' => null]);
+            config(['filesystems.default' => '']);
+
+            expect(LexicalConfig::getDisk())->toBe('public');
+        });
     });
 });
