@@ -22,19 +22,19 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@lexical/code": "^0.39.0",
-        "@lexical/hashtag": "^0.39.0",
-        "@lexical/history": "^0.39.0",
-        "@lexical/html": "^0.39.0",
-        "@lexical/link": "^0.39.0",
-        "@lexical/list": "^0.39.0",
-        "@lexical/rich-text": "^0.39.0",
-        "@lexical/selection": "^0.39.0",
-        "@lexical/table": "^0.39.0",
-        "@lexical/text": "^0.39.0",
-        "@lexical/utils": "^0.39.0",
+        "@lexical/code": "^0.41.0",
+        "@lexical/hashtag": "^0.41.0",
+        "@lexical/history": "^0.41.0",
+        "@lexical/html": "^0.41.0",
+        "@lexical/link": "^0.41.0",
+        "@lexical/list": "^0.41.0",
+        "@lexical/rich-text": "^0.41.0",
+        "@lexical/selection": "^0.41.0",
+        "@lexical/table": "^0.41.0",
+        "@lexical/text": "^0.41.0",
+        "@lexical/utils": "^0.41.0",
         "@melloware/coloris": "^0.25.0",
-        "lexical": "^0.39.0",
+        "lexical": "^0.41.0",
         "vanilla-colorful": "^0.7.2"
     }
 }
